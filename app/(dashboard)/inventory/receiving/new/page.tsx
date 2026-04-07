@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { apiFetch } from "@/lib/api"
 import { useRouter } from "next/navigation"
 import { ArrowLeft, Plus, Trash2, Package, Loader2 } from "lucide-react"
 import Link from "next/link"
@@ -53,7 +54,7 @@ export default function NewReceivingPage() {
     const fetchProducts = async () => {
       try {
         setLoading(true)
-        const response = await fetch('/api/products?pageSize=1000')
+        const response = await apiFetch('/api/products?pageSize=1000')
         const result = await response.json()
         if (result.success) {
           setProducts(result.data.data)
@@ -93,7 +94,7 @@ export default function NewReceivingPage() {
 
     try {
       setSubmitting(true)
-      const response = await fetch('/api/inventory/receiving', {
+      const response = await apiFetch('/api/inventory/receiving', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

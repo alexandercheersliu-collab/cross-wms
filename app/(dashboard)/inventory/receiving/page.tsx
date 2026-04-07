@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { apiFetch } from "@/lib/api"
 import { useRouter } from "next/navigation"
 import {
   ArrowLeft,
@@ -82,7 +83,7 @@ export default function ReceivingPage() {
         ...(statusFilter !== 'ALL' && { status: statusFilter }),
       })
 
-      const response = await fetch(`/api/inventory/receiving?${params}`)
+      const response = await apiFetch(`/api/inventory/receiving?${params}`)
       const result = await response.json()
 
       if (result.success) {

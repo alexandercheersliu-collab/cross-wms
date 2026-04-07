@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { apiFetch } from "@/lib/api"
 import { useRouter } from "next/navigation"
 import {
   ShoppingCart,
@@ -88,7 +89,7 @@ export default function OrdersPage() {
         ...(platformFilter !== 'ALL' && { platform: platformFilter }),
       })
 
-      const response = await fetch(`/api/orders?${params}`)
+      const response = await apiFetch(`/api/orders?${params}`)
       const result = await response.json()
 
       if (result.success) {
@@ -125,7 +126,7 @@ export default function OrdersPage() {
     if (!confirm('确定要取消此订单吗？取消后库存预留将被释放。')) return
 
     try {
-      const response = await fetch(`/api/orders/${orderId}`, {
+      const response = await apiFetch(`/api/orders/${orderId}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status: 'CANCELLED' })
@@ -144,7 +145,7 @@ export default function OrdersPage() {
 
   const handleUpdateStatus = async (orderId: string, newStatus: string) => {
     try {
-      const response = await fetch(`/api/orders/${orderId}`, {
+      const response = await apiFetch(`/api/orders/${orderId}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status: newStatus })
@@ -163,7 +164,7 @@ export default function OrdersPage() {
 
   const handleCreateShipment = async (order: Order) => {
     try {
-      const response = await fetch('/api/inventory/shipment', {
+      const response = await apiFetch('/api/inventory/shipment', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

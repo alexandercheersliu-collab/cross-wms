@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useRef, useEffect, Suspense } from "react"
+import { apiFetch } from "@/lib/api"
 import { useSearchParams } from "next/navigation"
 import { useReactToPrint } from "react-to-print"
 import {
@@ -63,7 +64,7 @@ function PrintPageContent() {
     if (!orderId) return
     try {
       setLoading(true)
-      const response = await fetch(`/api/print/picklist?orderId=${orderId}`)
+      const response = await apiFetch(`/api/print/picklist?orderId=${orderId}`)
       const result = await response.json()
       if (result.success) {
         setPicklistData(result.data)

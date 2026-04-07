@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { apiFetch } from "@/lib/api"
 import { useParams, useRouter } from "next/navigation"
 import {
   ArrowLeft,
@@ -65,7 +66,7 @@ export default function ProductDetailPage() {
     const fetchProduct = async () => {
       try {
         setLoading(true)
-        const response = await fetch(`/api/products/${params.id}`)
+        const response = await apiFetch(`/api/products/${params.id}`)
         const result = await response.json()
 
         if (result.success) {
@@ -91,7 +92,7 @@ export default function ProductDetailPage() {
 
     try {
       setDeleting(true)
-      const response = await fetch(`/api/products/${product.id}`, {
+      const response = await apiFetch(`/api/products/${product.id}`, {
         method: "DELETE",
       })
       const result = await response.json()

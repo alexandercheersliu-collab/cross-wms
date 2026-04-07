@@ -10,15 +10,22 @@ export async function GET(request: NextRequest) {
     const sku = searchParams.get('sku')
     const name = searchParams.get('name')
     const category = searchParams.get('category')
+    const search = searchParams.get('search')
     const sortBy = searchParams.get('sortBy') || 'createdAt'
     const sortOrder = searchParams.get('sortOrder') || 'desc'
 
     const skip = (page - 1) * pageSize
 
-    const where = {
+    const where: any = {
       ...(sku && { sku: { contains: sku, mode: 'insensitive' as const } }),
       ...(name && { name: { contains: name, mode: 'insensitive' as const } }),
       ...(category && { category: { contains: category, mode: 'insensitive' as const } }),
+      ...(search && {
+        OR: [
+          { sku: { contains: search, mode: 'insensitive' as const } },
+          { name: { contains: search, mode: 'insensitive' as const } },
+        ],
+      }),
     }
 
     const [products, total] = await Promise.all([

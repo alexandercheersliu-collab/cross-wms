@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { apiFetch } from "@/lib/api"
 import { useParams, useRouter } from "next/navigation"
 import {
   ArrowLeft,
@@ -100,7 +101,7 @@ export default function OrderDetailPage() {
   const fetchOrder = async () => {
     try {
       setLoading(true)
-      const response = await fetch(`/api/orders/${params.id}`)
+      const response = await apiFetch(`/api/orders/${params.id}`)
       const result = await response.json()
       if (result.success) {
         setOrder(result.data)
@@ -117,7 +118,7 @@ export default function OrderDetailPage() {
   const handleCancelOrder = async () => {
     try {
       setCancelling(true)
-      const response = await fetch(`/api/orders/${params.id}`, {
+      const response = await apiFetch(`/api/orders/${params.id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status: 'CANCELLED' })
@@ -138,7 +139,7 @@ export default function OrderDetailPage() {
 
   const handleUpdateStatus = async (newStatus: string) => {
     try {
-      const response = await fetch(`/api/orders/${params.id}`, {
+      const response = await apiFetch(`/api/orders/${params.id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status: newStatus })
@@ -157,7 +158,7 @@ export default function OrderDetailPage() {
 
   const handleCreateShipment = async () => {
     try {
-      const response = await fetch('/api/inventory/shipment', {
+      const response = await apiFetch('/api/inventory/shipment', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

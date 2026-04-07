@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { apiFetch } from "@/lib/api"
 import { ArrowLeft, History, ChevronLeft, ChevronRight, ArrowDownLeft, ArrowUpRight, Minus, Plus } from "lucide-react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
@@ -52,7 +53,7 @@ export default function TransactionsPage() {
         ...(typeFilter !== 'ALL' && { transactionType: typeFilter }),
       })
 
-      const response = await fetch(`/api/inventory/transactions?${params}`)
+      const response = await apiFetch(`/api/inventory/transactions?${params}`)
       const result = await response.json()
 
       if (result.success) {

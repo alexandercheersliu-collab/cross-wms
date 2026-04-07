@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { apiFetch } from "@/lib/api"
 import { useRouter } from "next/navigation"
 import { ArrowLeft, Plus, Trash2, ClipboardList, Loader2 } from "lucide-react"
 import Link from "next/link"
@@ -36,7 +37,7 @@ export default function NewStocktakePage() {
     const fetchProducts = async () => {
       try {
         setLoading(true)
-        const response = await fetch('/api/products?pageSize=1000')
+        const response = await apiFetch('/api/products?pageSize=1000')
         const result = await response.json()
         if (result.success) {
           setProducts(result.data.data)
@@ -68,7 +69,7 @@ export default function NewStocktakePage() {
 
     try {
       setSubmitting(true)
-      const response = await fetch('/api/inventory/stocktake', {
+      const response = await apiFetch('/api/inventory/stocktake', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ notes, items: validItems }),

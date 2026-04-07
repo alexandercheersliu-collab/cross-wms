@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { apiFetch } from "@/lib/api"
 import { useParams, useRouter } from "next/navigation"
 import { ArrowLeft, Loader2 } from "lucide-react"
 import Link from "next/link"
@@ -20,7 +21,7 @@ export default function EditProductPage() {
     const fetchProduct = async () => {
       try {
         setLoading(true)
-        const response = await fetch(`/api/products/${params.id}`)
+        const response = await apiFetch(`/api/products/${params.id}`)
         const result = await response.json()
 
         if (result.success) {

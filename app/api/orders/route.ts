@@ -21,6 +21,7 @@ export async function GET(request: NextRequest) {
     const platform = searchParams.get('platform')
     const startDate = searchParams.get('startDate')
     const endDate = searchParams.get('endDate')
+    const search = searchParams.get('search')
 
     const skip = (page - 1) * pageSize
 
@@ -29,6 +30,12 @@ export async function GET(request: NextRequest) {
       ...(platform && { platform }),
       ...(startDate && { createdAt: { gte: new Date(startDate) } }),
       ...(endDate && { createdAt: { lte: new Date(endDate) } }),
+      ...(search && {
+        OR: [
+          { orderNo: { contains: search, mode: 'insensitive' as const } },
+          { customerName: { contains: search, mode: 'insensitive' as const } },
+        ],
+      }),
     }
 
     const [orders, total] = await Promise.all([

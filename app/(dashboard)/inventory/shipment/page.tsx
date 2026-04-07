@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { apiFetch } from "@/lib/api"
 import { ArrowLeft, Plus, Truck, CheckCircle, Clock, Package, ChevronLeft, ChevronRight, ShoppingCart } from "lucide-react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
@@ -54,7 +55,7 @@ export default function ShipmentPage() {
         page: page.toString(), pageSize: '20',
         ...(statusFilter !== 'ALL' && { status: statusFilter }),
       })
-      const response = await fetch(`/api/inventory/shipment?${params}`)
+      const response = await apiFetch(`/api/inventory/shipment?${params}`)
       const result = await response.json()
       if (result.success) {
         setShipments(result.data.data)

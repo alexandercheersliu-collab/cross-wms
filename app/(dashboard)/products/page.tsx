@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
+import { apiFetch } from "@/lib/api"
 import {
   Search,
   Plus,
@@ -87,7 +88,8 @@ export default function ProductsPage() {
         ...(search && { sku: search }),
       })
 
-      const response = await fetch(`/api/products?${params}`)
+      const response = await apiFetch(`/api/products?${params}`)
+
       const result = await response.json()
 
       if (result.success) {
@@ -115,7 +117,7 @@ export default function ProductsPage() {
 
     try {
       setDeleting(true)
-      const response = await fetch(`/api/products/${productToDelete.id}`, {
+      const response = await apiFetch(`/api/products/${productToDelete.id}`, {
         method: "DELETE",
       })
       const result = await response.json()

@@ -12,8 +12,16 @@ export function proxy(request: NextRequest) {
   // API 路由（除了认证相关的）
   const isApiRoute = pathname.startsWith("/api")
 
-  // 如果没有登录且不是公开路由，重定向到登录页
+  // 如果没有登录且不是公开路由
   if (!authSession && !isPublicRoute) {
+    // API 路由返回 401 而不是重定向
+    if (isApiRoute) {
+      return NextResponse.json(
+        { success: false, error: "未登录" },
+        { status: 401 }
+      )
+    }
+    // 页面路由重定向到登录页
     return NextResponse.redirect(new URL("/login", request.url))
   }
 

@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { apiFetch } from "@/lib/api"
 import { ArrowLeft, Plus, ClipboardList, CheckCircle, Clock, ChevronLeft, ChevronRight } from "lucide-react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
@@ -46,7 +47,7 @@ export default function StocktakePage() {
         page: page.toString(), pageSize: '20',
         ...(statusFilter !== 'ALL' && { status: statusFilter }),
       })
-      const response = await fetch(`/api/inventory/stocktake?${params}`)
+      const response = await apiFetch(`/api/inventory/stocktake?${params}`)
       const result = await response.json()
       if (result.success) {
         setStocktakes(result.data.data)

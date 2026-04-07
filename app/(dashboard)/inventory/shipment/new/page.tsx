@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect, Suspense } from "react"
+import { apiFetch } from "@/lib/api"
 import { useRouter, useSearchParams } from "next/navigation"
 import { ArrowLeft, Plus, Trash2, Truck, Loader2, ShoppingCart, ExternalLink } from "lucide-react"
 import Link from "next/link"
@@ -54,7 +55,7 @@ function NewShipmentPageContent() {
     const fetchOrder = async () => {
       if (!orderId) return
       try {
-        const response = await fetch(`/api/orders/${orderId}`)
+        const response = await apiFetch(`/api/orders/${orderId}`)
         const result = await response.json()
         if (result.success) {
           setOrder(result.data)
@@ -78,7 +79,7 @@ function NewShipmentPageContent() {
     const fetchProducts = async () => {
       try {
         setLoading(true)
-        const response = await fetch('/api/inventory?pageSize=1000')
+        const response = await apiFetch('/api/inventory?pageSize=1000')
         const result = await response.json()
         if (result.success) {
           // 只显示有库存的商品，并保留库存数量信息
@@ -118,7 +119,7 @@ function NewShipmentPageContent() {
 
     try {
       setSubmitting(true)
-      const response = await fetch('/api/inventory/shipment', {
+      const response = await apiFetch('/api/inventory/shipment', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ orderId: orderId || undefined, trackingNumber, notes, items: validItems }),

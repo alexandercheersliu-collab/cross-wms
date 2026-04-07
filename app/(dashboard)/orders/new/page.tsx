@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { apiFetch } from "@/lib/api"
 import { useRouter } from "next/navigation"
 import { ArrowLeft, Plus, Trash2, ShoppingCart, Loader2 } from "lucide-react"
 import Link from "next/link"
@@ -43,7 +44,7 @@ export default function NewOrderPage() {
     const fetchProducts = async () => {
       try {
         setLoading(true)
-        const response = await fetch('/api/products?pageSize=1000')
+        const response = await apiFetch('/api/products?pageSize=1000')
         const result = await response.json()
         if (result.success) {
           setProducts(result.data.data)
@@ -100,7 +101,7 @@ export default function NewOrderPage() {
 
     try {
       setSubmitting(true)
-      const response = await fetch('/api/orders', {
+      const response = await apiFetch('/api/orders', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

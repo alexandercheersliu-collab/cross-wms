@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { apiFetch } from "@/lib/api"
 import { useRouter } from "next/navigation"
 import {
   Search,
@@ -77,7 +78,7 @@ export default function InventoryPage() {
         ...(lowStockOnly && { lowStock: 'true' }),
       })
 
-      const response = await fetch(`/api/inventory?${params}`)
+      const response = await apiFetch(`/api/inventory?${params}`)
       const result = await response.json()
 
       if (result.success) {

@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { apiFetch } from "@/lib/api"
 import {
   Package,
   ShoppingCart,
@@ -69,7 +70,7 @@ export default function AnalyticsPage() {
   const fetchDashboardData = async () => {
     try {
       setLoading(true)
-      const response = await fetch('/api/dashboard')
+      const response = await apiFetch('/api/dashboard')
       const result = await response.json()
       if (result.success) {
         setData(result.data)
