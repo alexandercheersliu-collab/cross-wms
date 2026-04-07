@@ -1,0 +1,242 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Product {
+  id          String   @id @default(cuid())
+  sku         String   @unique
+  name        String
+  description String?
+  category    String?
+  imageUrl    String?
+  weight      Float?   // 克
+  length      Float?   // 厘米
+  width       Float?   // 厘米
+  height      Float?   // 厘米
+  costPrice   Decimal? @db.Decimal(10, 2)
+  salePrice   Decimal  @db.Decimal(10, 2)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // 关系
+  inventory   Inventory?
+  orderItems  OrderItem[]
+  receivingItems ReceivingItem[]
+  shipmentItems  ShipmentItem[]
+  stocktakeItems StocktakeItem[]
+  transactions   InventoryTransaction[]
+
+  @@index([sku])
+  @@index([category])
+}
+
+model Inventory {
+  id          String   @id @default(cuid())
+  productId   String   @unique
+  quantity    Int      @default(0)
+  reserved    Int      @default(0)  // 已预订未发货
+  location    String?  // 库位，如 A-01-02
+  updatedAt   DateTime @updatedAt
+
+  product     Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@index([productId])
+}
+
+model InventoryTransaction {
+  id               String   @id @default(cuid())
+  productId        String
+  quantityChange   Int      // 正数表示入库，负数表示出库
+  transactionType  TransactionType
+  referenceId      String?  // 关联单据ID（入库单、出库单、盘点单等）
+  referenceType    TransactionReferenceType?
+  notes            String?
+  createdAt        DateTime @default(now())
+
+  product     Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@index([productId])
+  @@index([createdAt])
+  @@index([referenceId, referenceType])
+}
+
+model Order {
+  id          String   @id @default(cuid())
+  orderNo     String   @unique  // 平台订单号
+  platform    String   // amazon, shopify, tiktok...
+  status      OrderStatus @default(PENDING)
+  customerName String?
+  customerEmail String?
+  shippingAddress String?
+  totalAmount Decimal  @db.Decimal(10, 2)
+  notes       String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  shippedAt   DateTime?
+
+  items       OrderItem[]
+  shipments   Shipment[]
+
+  @@index([orderNo])
+  @@index([status])
+  @@index([createdAt])
+}
+
+model OrderItem {
+  id          String   @id @default(cuid())
+  orderId     String
+  productId   String
+  quantity    Int
+  pickedQty   Int      @default(0)
+  unitPrice   Decimal  @db.Decimal(10, 2)
+
+  order       Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product     Product  @relation(fields: [productId], references: [id])
+
+  @@unique([orderId, productId])
+  @@index([orderId])
+  @@index([productId])
+}
+
+model Receiving {
+  id              String   @id @default(cuid())
+  receivingNo     String   @unique
+  status          ReceivingStatus @default(PENDING)
+  receivedAt      DateTime?
+  notes           String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  items          ReceivingItem[]
+
+  @@index([receivingNo])
+  @@index([status])
+}
+
+model ReceivingItem {
+  id          String   @id @default(cuid())
+  receivingId String
+  productId   String
+  quantity    Int
+  unitCost    Decimal? @db.Decimal(10, 2)
+
+  receiving   Receiving @relation(fields: [receivingId], references: [id], onDelete: Cascade)
+  product     Product   @relation(fields: [productId], references: [id])
+
+  @@unique([receivingId, productId])
+  @@index([receivingId])
+  @@index([productId])
+}
+
+model Shipment {
+  id             String   @id @default(cuid())
+  shipmentNo     String   @unique
+  orderId        String?
+  status         ShipmentStatus @default(PENDING)
+  shippedAt      DateTime?
+  trackingNumber String?
+  notes          String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  order          Order?   @relation(fields: [orderId], references: [id])
+  items          ShipmentItem[]
+
+  @@index([shipmentNo])
+  @@index([status])
+  @@index([orderId])
+}
+
+model ShipmentItem {
+  id         String   @id @default(cuid())
+  shipmentId String
+  productId  String
+  quantity   Int
+
+  shipment   Shipment @relation(fields: [shipmentId], references: [id], onDelete: Cascade)
+  product    Product  @relation(fields: [productId], references: [id])
+
+  @@unique([shipmentId, productId])
+  @@index([shipmentId])
+  @@index([productId])
+}
+
+model Stocktake {
+  id              String   @id @default(cuid())
+  stocktakeNo     String   @unique
+  status          StocktakeStatus @default(IN_PROGRESS)
+  countedAt       DateTime?
+  notes           String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  items          StocktakeItem[]
+
+  @@index([stocktakeNo])
+  @@index([status])
+}
+
+model StocktakeItem {
+  id              String   @id @default(cuid())
+  stocktakeId     String
+  productId       String
+  countedQuantity Int
+  systemQuantity  Int      // 盘点时的系统库存数量
+  variance        Int      // 差异数量 = countedQuantity - systemQuantity
+
+  stocktake       Stocktake @relation(fields: [stocktakeId], references: [id], onDelete: Cascade)
+  product         Product   @relation(fields: [productId], references: [id])
+
+  @@unique([stocktakeId, productId])
+  @@index([stocktakeId])
+  @@index([productId])
+}
+
+// 枚举类型
+enum TransactionType {
+  INBOUND
+  OUTBOUND
+  ADJUSTMENT
+  STOCKTAKE
+}
+
+enum TransactionReferenceType {
+  ORDER
+  RECEIVING
+  SHIPMENT
+  STOCKTAKE
+  MANUAL
+}
+
+enum OrderStatus {
+  PENDING
+  PROCESSING
+  PICKING
+  SHIPPED
+  DELIVERED
+  CANCELLED
+}
+
+enum ReceivingStatus {
+  PENDING
+  RECEIVED
+  CANCELLED
+}
+
+enum ShipmentStatus {
+  PENDING
+  PACKING
+  SHIPPED
+  DELIVERED
+  CANCELLED
+}
+
+enum StocktakeStatus {
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+}
