@@ -3,8 +3,8 @@ import { defineConfig } from 'prisma/config'
 export default defineConfig({
   schema: './prisma/schema.prisma',
   migrate: {
-    async getDatabaseUrl() {
-      const url = process.env.DATABASE_URL
+    async getDatabaseUrl(env: any) {
+      const url = env.DATABASE_URL || process.env.DATABASE_URL
       if (!url) {
         throw new Error('DATABASE_URL environment variable is not set')
       }
@@ -12,8 +12,8 @@ export default defineConfig({
     },
   },
   studio: {
-    async getDatabaseUrl() {
-      const url = process.env.DATABASE_URL
+    async getDatabaseUrl(env: any) {
+      const url = env.DATABASE_URL || process.env.DATABASE_URL
       if (!url) {
         throw new Error('DATABASE_URL environment variable is not set')
       }
