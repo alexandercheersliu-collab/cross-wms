@@ -7,8 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "postinstall": "prisma generate",
-    "vercel-build": "prisma generate && prisma migrate deploy && next build"
+    "postinstall": "prisma generate --config prisma.config.ts",
+    "vercel-build": "prisma generate --config prisma.config.ts && prisma migrate deploy --config prisma.config.ts && next build"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
