@@ -19,7 +19,7 @@
     },
     {
       "src": "/api/(.*)",
-      "function": "api/[[path]]"
+      "function": "api/index"
     },
     {
       "src": "/(.*)",
