@@ -12,21 +12,6 @@ const path = require('path');
 const API_DIR = path.join(process.cwd(), 'app', 'api');
 const API_BACKUP_DIR = path.join(process.cwd(), '.temp-api-backup');
 
-// 递归复制目录
-function copyDir(src, dest) {
-  fs.mkdirSync(dest, { recursive: true });
-  const entries = fs.readdirSync(src, { withFileTypes: true });
-  for (const entry of entries) {
-    const srcPath = path.join(src, entry.name);
-    const destPath = path.join(dest, entry.name);
-    if (entry.isDirectory()) {
-      copyDir(srcPath, destPath);
-    } else {
-      fs.copyFileSync(srcPath, destPath);
-    }
-  }
-}
-
 function main() {
   console.log('🚀 开始 EdgeOne 构建...\n');
 
@@ -60,15 +45,6 @@ function main() {
     console.log('📁 dist 目录内容:');
     const distFiles = fs.readdirSync(path.join(process.cwd(), 'dist'));
     distFiles.forEach(f => console.log('   -', f));
-
-    // 复制 edge-functions 到 dist 目录
-    const edgeFunctionsDir = path.join(process.cwd(), 'edge-functions');
-    const distFunctionsDir = path.join(process.cwd(), 'dist', 'edge-functions');
-    if (fs.existsSync(edgeFunctionsDir)) {
-      console.log('\n📦 复制 edge-functions 到 dist...');
-      copyDir(edgeFunctionsDir, distFunctionsDir);
-      console.log('   ✓ edge-functions 已复制');
-    }
 
   } catch (error) {
     console.error('\n❌ 构建失败:', error.message);
