@@ -1,55 +1,53 @@
 /**
- * EdgeOne Pages Functions - API 路由入口
- * 使用标准 Web API 格式 (JavaScript)
+ * EdgeOne Pages Cloud Functions - API 路由入口
  */
 
-// 默认导出 - EdgeOne 期望的格式
-export default {
-  async fetch(request, env) {
-    const url = new URL(request.url);
-    const path = url.pathname.replace('/api/', '').split('/');
+// Cloud Function 入口 - 使用 onRequest 格式
+export default function onRequest(context) {
+  const { request, env } = context;
+  const url = new URL(request.url);
+  const path = url.pathname.replace('/api/', '').split('/');
 
-    // 设置 CORS 头
-    const corsHeaders = {
-      "Access-Control-Allow-Origin": "*",
-      "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
-      "Access-Control-Allow-Headers": "Content-Type, Authorization",
-    };
+  // 设置 CORS 头
+  const corsHeaders = {
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+    "Access-Control-Allow-Headers": "Content-Type, Authorization",
+  };
 
-    // 处理预检请求
-    if (request.method === "OPTIONS") {
-      return new Response(null, {
-        status: 204,
-        headers: corsHeaders
-      });
-    }
-
-    try {
-      const route = path[0] || "";
-
-      switch (route) {
-        case "products":
-          return await handleProducts(request, env, path.slice(1));
-        case "orders":
-          return await handleOrders(request, env, path.slice(1));
-        case "inventory":
-          return await handleInventory(request, env, path.slice(1));
-        case "auth":
-          return await handleAuth(request, env, path.slice(1));
-        case "dashboard":
-          return await handleDashboard(request, env);
-        default:
-          return jsonResponse({ success: false, error: "未找到路由" }, 404);
-      }
-    } catch (error) {
-      console.error("API 错误:", error);
-      return jsonResponse({
-        success: false,
-        error: "服务器内部错误"
-      }, 500);
-    }
+  // 处理预检请求
+  if (request.method === "OPTIONS") {
+    return new Response(null, {
+      status: 204,
+      headers: corsHeaders
+    });
   }
-};
+
+  try {
+    const route = path[0] || "";
+
+    switch (route) {
+      case "products":
+        return handleProducts(request, env, path.slice(1));
+      case "orders":
+        return handleOrders(request, env, path.slice(1));
+      case "inventory":
+        return handleInventory(request, env, path.slice(1));
+      case "auth":
+        return handleAuth(request, env, path.slice(1));
+      case "dashboard":
+        return handleDashboard(request, env);
+      default:
+        return jsonResponse({ success: false, error: "未找到路由" }, 404);
+    }
+  } catch (error) {
+    console.error("API 错误:", error);
+    return jsonResponse({
+      success: false,
+      error: "服务器内部错误"
+    }, 500);
+  }
+}
 
 // 辅助函数：JSON 响应
 function jsonResponse(data, status = 200, headers = {}) {
@@ -64,7 +62,7 @@ function jsonResponse(data, status = 200, headers = {}) {
 }
 
 // 商品处理器
-async function handleProducts(request, env, path) {
+function handleProducts(request, env, path) {
   const id = path[0];
 
   switch (request.method) {
@@ -90,20 +88,21 @@ async function handleProducts(request, env, path) {
       if (id) {
         return jsonResponse({ success: true, message: "商品更新成功" });
       }
-      break;
+      return jsonResponse({ success: false, error: "需要指定商品ID" }, 400);
 
     case "DELETE":
       if (id) {
         return jsonResponse({ success: true, message: "商品删除成功" });
       }
-      break;
-  }
+      return jsonResponse({ success: false, error: "需要指定商品ID" }, 400);
 
-  return jsonResponse({ success: false, error: "方法不允许" }, 405);
+    default:
+      return jsonResponse({ success: false, error: "方法不允许" }, 405);
+  }
 }
 
 // 订单处理器
-async function handleOrders(request, env, path) {
+function handleOrders(request, env, path) {
   const id = path[0];
 
   switch (request.method) {
@@ -129,14 +128,15 @@ async function handleOrders(request, env, path) {
       if (id) {
         return jsonResponse({ success: true, message: "订单更新成功" });
       }
-      break;
-  }
+      return jsonResponse({ success: false, error: "需要指定订单ID" }, 400);
 
-  return jsonResponse({ success: false, error: "方法不允许" }, 405);
+    default:
+      return jsonResponse({ success: false, error: "方法不允许" }, 405);
+  }
 }
 
 // 库存处理器
-async function handleInventory(request, env, path) {
+function handleInventory(request, env, path) {
   const subRoute = path[0];
 
   if (request.method === "GET") {
@@ -169,7 +169,7 @@ async function handleInventory(request, env, path) {
 }
 
 // 认证处理器
-async function handleAuth(request, env, path) {
+function handleAuth(request, env, path) {
   const action = path[0];
 
   if (request.method === "POST") {
@@ -195,7 +195,7 @@ async function handleAuth(request, env, path) {
 }
 
 // 仪表盘处理器
-async function handleDashboard(request, env) {
+function handleDashboard(request, env) {
   if (request.method !== "GET") {
     return jsonResponse({ success: false, error: "方法不允许" }, 405);
   }
