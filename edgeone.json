@@ -3,5 +3,5 @@
   "version": "1.0.0",
   "buildCommand": "npm run edgeone:build",
   "outputDirectory": "dist",
-  "framework": "nextjs"
+  "functionsDirectory": "functions"
 }
