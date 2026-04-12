@@ -1,60 +1,59 @@
 /**
  * EdgeOne Pages Functions - API 路由入口
+ * 使用标准 Web API 格式
  */
 
 export interface Env {
   DATABASE_URL: string;
 }
 
-// EdgeOne Pages Function 入口
-export async function onRequest(context: {
-  request: Request;
-  env: Env;
-}): Promise<Response> {
-  const { request, env } = context;
-  const url = new URL(request.url);
-  const path = url.pathname.replace('/api/', '').split('/');
+// 默认导出 - EdgeOne 可能期望这种格式
+export default {
+  async fetch(request: Request, env: Env): Promise<Response> {
+    const url = new URL(request.url);
+    const path = url.pathname.replace('/api/', '').split('/');
 
-  // 设置 CORS 头
-  const corsHeaders = {
-    "Access-Control-Allow-Origin": "*",
-    "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
-    "Access-Control-Allow-Headers": "Content-Type, Authorization",
-  };
+    // 设置 CORS 头
+    const corsHeaders = {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+      "Access-Control-Allow-Headers": "Content-Type, Authorization",
+    };
 
-  // 处理预检请求
-  if (request.method === "OPTIONS") {
-    return new Response(null, {
-      status: 204,
-      headers: corsHeaders
-    });
-  }
-
-  try {
-    const route = path[0] || "";
-
-    switch (route) {
-      case "products":
-        return await handleProducts(request, env, path.slice(1));
-      case "orders":
-        return await handleOrders(request, env, path.slice(1));
-      case "inventory":
-        return await handleInventory(request, env, path.slice(1));
-      case "auth":
-        return await handleAuth(request, env, path.slice(1));
-      case "dashboard":
-        return await handleDashboard(request, env);
-      default:
-        return jsonResponse({ success: false, error: "未找到路由" }, 404);
+    // 处理预检请求
+    if (request.method === "OPTIONS") {
+      return new Response(null, {
+        status: 204,
+        headers: corsHeaders
+      });
     }
-  } catch (error) {
-    console.error("API 错误:", error);
-    return jsonResponse({
-      success: false,
-      error: "服务器内部错误"
-    }, 500);
+
+    try {
+      const route = path[0] || "";
+
+      switch (route) {
+        case "products":
+          return await handleProducts(request, env, path.slice(1));
+        case "orders":
+          return await handleOrders(request, env, path.slice(1));
+        case "inventory":
+          return await handleInventory(request, env, path.slice(1));
+        case "auth":
+          return await handleAuth(request, env, path.slice(1));
+        case "dashboard":
+          return await handleDashboard(request, env);
+        default:
+          return jsonResponse({ success: false, error: "未找到路由" }, 404);
+      }
+    } catch (error) {
+      console.error("API 错误:", error);
+      return jsonResponse({
+        success: false,
+        error: "服务器内部错误"
+      }, 500);
+    }
   }
-}
+};
 
 // 辅助函数：JSON 响应
 function jsonResponse(data: any, status = 200, headers = {}) {
