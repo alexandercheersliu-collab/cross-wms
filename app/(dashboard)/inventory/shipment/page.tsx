@@ -56,7 +56,7 @@ export default function ShipmentPage() {
         ...(statusFilter !== 'ALL' && { status: statusFilter }),
       })
       const response = await apiFetch(`/api/inventory/shipment?${params}`)
-      const result = await response.json()
+      const result: any = await response.json()
       if (result.success) {
         setShipments(result.data.data)
         setTotal(result.data.total)

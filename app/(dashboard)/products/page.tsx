@@ -90,7 +90,7 @@ export default function ProductsPage() {
 
       const response = await apiFetch(`/api/products?${params}`)
 
-      const result = await response.json()
+      const result: any = await response.json()
 
       if (result.success) {
         setProducts(result.data.data)
@@ -120,7 +120,7 @@ export default function ProductsPage() {
       const response = await apiFetch(`/api/products/${productToDelete.id}`, {
         method: "DELETE",
       })
-      const result = await response.json()
+      const result: any = await response.json()
 
       if (result.success) {
         // 重新获取商品列表

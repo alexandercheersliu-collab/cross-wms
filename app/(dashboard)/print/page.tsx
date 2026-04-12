@@ -65,7 +65,7 @@ function PrintPageContent() {
     try {
       setLoading(true)
       const response = await apiFetch(`/api/print/picklist?orderId=${orderId}`)
-      const result = await response.json()
+      const result: any = await response.json()
       if (result.success) {
         setPicklistData(result.data)
       } else {

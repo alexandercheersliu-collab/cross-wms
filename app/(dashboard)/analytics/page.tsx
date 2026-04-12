@@ -71,7 +71,7 @@ export default function AnalyticsPage() {
     try {
       setLoading(true)
       const response = await apiFetch('/api/dashboard')
-      const result = await response.json()
+      const result: any = await response.json()
       if (result.success) {
         setData(result.data)
       }

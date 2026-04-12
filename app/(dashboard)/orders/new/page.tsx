@@ -45,7 +45,7 @@ export default function NewOrderPage() {
       try {
         setLoading(true)
         const response = await apiFetch('/api/products?pageSize=1000')
-        const result = await response.json()
+        const result: any = await response.json()
         if (result.success) {
           setProducts(result.data.data)
         }
@@ -115,7 +115,7 @@ export default function NewOrderPage() {
         }),
       })
 
-      const result = await response.json()
+      const result: any = await response.json()
       if (result.success) {
         router.push('/orders')
         router.refresh()

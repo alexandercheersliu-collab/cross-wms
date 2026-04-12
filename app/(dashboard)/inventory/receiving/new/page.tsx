@@ -55,7 +55,7 @@ export default function NewReceivingPage() {
       try {
         setLoading(true)
         const response = await apiFetch('/api/products?pageSize=1000')
-        const result = await response.json()
+        const result: any = await response.json()
         if (result.success) {
           setProducts(result.data.data)
         }
@@ -103,7 +103,7 @@ export default function NewReceivingPage() {
         }),
       })
 
-      const result = await response.json()
+      const result: any = await response.json()
 
       if (result.success) {
         router.push('/inventory/receiving')

@@ -79,7 +79,7 @@ export default function InventoryPage() {
       })
 
       const response = await apiFetch(`/api/inventory?${params}`)
-      const result = await response.json()
+      const result: any = await response.json()
 
       if (result.success) {
         setInventory(result.data.data)

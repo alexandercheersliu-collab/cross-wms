@@ -102,7 +102,7 @@ export function OrderDetailPageClient() {
     try {
       setLoading(true)
       const response = await apiFetch(`/api/orders/${params.id}`)
-      const result = await response.json()
+      const result: any = await response.json()
       if (result.success) {
         setOrder(result.data)
       } else {
@@ -123,7 +123,7 @@ export function OrderDetailPageClient() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status: 'CANCELLED' })
       })
-      const result = await response.json()
+      const result: any = await response.json()
       if (result.success) {
         fetchOrder()
       } else {
@@ -144,7 +144,7 @@ export function OrderDetailPageClient() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status: newStatus })
       })
-      const result = await response.json()
+      const result: any = await response.json()
       if (result.success) {
         fetchOrder()
       } else {
@@ -169,7 +169,7 @@ export function OrderDetailPageClient() {
           })).filter(item => item.quantity > 0)
         })
       })
-      const result = await response.json()
+      const result: any = await response.json()
       if (result.success) {
         alert('出库单创建成功')
         fetchOrder()

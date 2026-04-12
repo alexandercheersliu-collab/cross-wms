@@ -71,7 +71,7 @@ export default function Header() {
 
       // 处理订单结果
       if (ordersRes?.ok) {
-        const ordersData = await ordersRes.json()
+        const ordersData: any = await ordersRes.json()
         if (ordersData.success && ordersData.data.data.length > 0) {
           results.push(
             ...ordersData.data.data.map((order: any) => ({
@@ -87,7 +87,7 @@ export default function Header() {
 
       // 处理商品结果
       if (productsRes?.ok) {
-        const productsData = await productsRes.json()
+        const productsData: any = await productsRes.json()
         if (productsData.success && productsData.data.data.length > 0) {
           results.push(
             ...productsData.data.data.map((product: any) => ({

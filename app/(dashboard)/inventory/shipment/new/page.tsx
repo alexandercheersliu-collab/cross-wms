@@ -56,7 +56,7 @@ function NewShipmentPageContent() {
       if (!orderId) return
       try {
         const response = await apiFetch(`/api/orders/${orderId}`)
-        const result = await response.json()
+        const result: any = await response.json()
         if (result.success) {
           setOrder(result.data)
           // 预填充订单商品到出库项
@@ -80,7 +80,7 @@ function NewShipmentPageContent() {
       try {
         setLoading(true)
         const response = await apiFetch('/api/inventory?pageSize=1000')
-        const result = await response.json()
+        const result: any = await response.json()
         if (result.success) {
           // 只显示有库存的商品，并保留库存数量信息
           const inventoryItems = result.data.data.filter((i: any) => i.quantity > 0)
@@ -124,7 +124,7 @@ function NewShipmentPageContent() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ orderId: orderId || undefined, trackingNumber, notes, items: validItems }),
       })
-      const result = await response.json()
+      const result: any = await response.json()
       if (result.success) {
         router.push('/inventory/shipment')
         router.refresh()

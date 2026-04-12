@@ -84,7 +84,7 @@ export default function ReceivingPage() {
       })
 
       const response = await apiFetch(`/api/inventory/receiving?${params}`)
-      const result = await response.json()
+      const result: any = await response.json()
 
       if (result.success) {
         setReceivings(result.data.data)

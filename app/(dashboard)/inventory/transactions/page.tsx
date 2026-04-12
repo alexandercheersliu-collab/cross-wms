@@ -54,7 +54,7 @@ export default function TransactionsPage() {
       })
 
       const response = await apiFetch(`/api/inventory/transactions?${params}`)
-      const result = await response.json()
+      const result: any = await response.json()
 
       if (result.success) {
         setTransactions(result.data.data)

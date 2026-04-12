@@ -22,7 +22,7 @@ export function EditProductPageClient() {
       try {
         setLoading(true)
         const response = await apiFetch(`/api/products/${params.id}`)
-        const result = await response.json()
+        const result: any = await response.json()
 
         if (result.success) {
           const productData = result.data

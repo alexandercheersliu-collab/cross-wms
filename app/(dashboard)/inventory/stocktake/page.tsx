@@ -48,7 +48,7 @@ export default function StocktakePage() {
         ...(statusFilter !== 'ALL' && { status: statusFilter }),
       })
       const response = await apiFetch(`/api/inventory/stocktake?${params}`)
-      const result = await response.json()
+      const result: any = await response.json()
       if (result.success) {
         setStocktakes(result.data.data)
         setTotal(result.data.total)

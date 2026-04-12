@@ -76,7 +76,7 @@ export function ProductForm({
           body: JSON.stringify(data),
         })
 
-        const result = await response.json()
+        const result: any = await response.json()
 
         if (result.success) {
           router.push("/products")

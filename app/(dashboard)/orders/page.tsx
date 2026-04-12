@@ -90,7 +90,7 @@ export default function OrdersPage() {
       })
 
       const response = await apiFetch(`/api/orders?${params}`)
-      const result = await response.json()
+      const result: any = await response.json()
 
       if (result.success) {
         setOrders(result.data.data)
@@ -131,7 +131,7 @@ export default function OrdersPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status: 'CANCELLED' })
       })
-      const result = await response.json()
+      const result: any = await response.json()
       if (result.success) {
         fetchOrders()
       } else {
@@ -150,7 +150,7 @@ export default function OrdersPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status: newStatus })
       })
-      const result = await response.json()
+      const result: any = await response.json()
       if (result.success) {
         fetchOrders()
       } else {
@@ -175,7 +175,7 @@ export default function OrdersPage() {
           }))
         })
       })
-      const result = await response.json()
+      const result: any = await response.json()
       if (result.success) {
         alert('出库单创建成功')
         fetchOrders()

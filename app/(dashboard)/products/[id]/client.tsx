@@ -67,7 +67,7 @@ export function ProductDetailPageClient() {
       try {
         setLoading(true)
         const response = await apiFetch(`/api/products/${params.id}`)
-        const result = await response.json()
+        const result: any = await response.json()
 
         if (result.success) {
           setProduct(result.data)
@@ -95,7 +95,7 @@ export function ProductDetailPageClient() {
       const response = await apiFetch(`/api/products/${product.id}`, {
         method: "DELETE",
       })
-      const result = await response.json()
+      const result: any = await response.json()
 
       if (result.success) {
         router.push("/products")

@@ -38,7 +38,7 @@ export default function NewStocktakePage() {
       try {
         setLoading(true)
         const response = await apiFetch('/api/products?pageSize=1000')
-        const result = await response.json()
+        const result: any = await response.json()
         if (result.success) {
           setProducts(result.data.data)
         }
@@ -74,7 +74,7 @@ export default function NewStocktakePage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ notes, items: validItems }),
       })
-      const result = await response.json()
+      const result: any = await response.json()
       if (result.success) {
         router.push('/inventory/stocktake')
         router.refresh()

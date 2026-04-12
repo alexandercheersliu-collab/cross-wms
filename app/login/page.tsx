@@ -32,7 +32,7 @@ export default function LoginPage() {
         body: JSON.stringify({ username, password }),
       })
 
-      const result = await response.json()
+      const result: any = await response.json()
 
       if (result.success) {
         router.push("/")
