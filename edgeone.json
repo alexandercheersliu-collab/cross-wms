@@ -3,5 +3,15 @@
   "version": "1.0.0",
   "buildCommand": "npm run edgeone:build",
   "outputDirectory": "dist",
-  "functionsDirectory": "functions"
+  "functionsDirectory": "functions",
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "/api/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/$1"
+    }
+  ]
 }
