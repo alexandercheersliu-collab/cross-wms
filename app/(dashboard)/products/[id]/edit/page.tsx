@@ -1,10 +1,9 @@
-import { EditProductPageClient } from "./client"
-
-// 为静态导出生成空参数（实际数据在客户端获取）
 export function generateStaticParams() {
-  return []
+  return [{ id: 'placeholder' }]
 }
 
-export default function EditProductPage() {
+import EditProductPageClient from "./client"
+
+export default function Page() {
   return <EditProductPageClient />
 }

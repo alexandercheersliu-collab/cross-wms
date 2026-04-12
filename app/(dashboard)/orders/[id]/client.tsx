@@ -478,3 +478,5 @@ export function OrderDetailPageClient() {
     </div>
   )
 }
+
+export default OrderDetailPageClient

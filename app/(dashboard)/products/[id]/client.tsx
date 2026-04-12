@@ -422,3 +422,5 @@ export function ProductDetailPageClient() {
     </div>
   )
 }
+
+export default ProductDetailPageClient

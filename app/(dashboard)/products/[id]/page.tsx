@@ -1,10 +1,10 @@
-import { ProductDetailPageClient } from "./client"
-
-// 为静态导出生成空参数（实际数据在客户端获取）
+// Server Component
 export function generateStaticParams() {
-  return []
+  return [{ id: 'placeholder' }]
 }
 
-export default function ProductDetailPage() {
+import ProductDetailPageClient from "./client"
+
+export default function Page() {
   return <ProductDetailPageClient />
 }

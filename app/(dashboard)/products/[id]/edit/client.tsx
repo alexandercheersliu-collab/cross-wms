@@ -160,3 +160,5 @@ export function EditProductPageClient() {
     </div>
   )
 }
+
+export default EditProductPageClient
