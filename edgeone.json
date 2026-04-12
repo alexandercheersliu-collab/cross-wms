@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "buildCommand": "npm run edgeone:build",
   "outputDirectory": "dist",
-  "functionsDirectory": "functions",
+  "functionsDirectory": "edge-functions",
   "routes": [
     {
       "src": "/_next/static/(.*)",
