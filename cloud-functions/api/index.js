@@ -1,15 +1,11 @@
 /**
  * EdgeOne Pages Functions - API 路由入口
- * 使用标准 Web API 格式
+ * 使用标准 Web API 格式 (JavaScript)
  */
 
-export interface Env {
-  DATABASE_URL: string;
-}
-
-// 默认导出 - EdgeOne 可能期望这种格式
+// 默认导出 - EdgeOne 期望的格式
 export default {
-  async fetch(request: Request, env: Env): Promise<Response> {
+  async fetch(request, env) {
     const url = new URL(request.url);
     const path = url.pathname.replace('/api/', '').split('/');
 
@@ -56,7 +52,7 @@ export default {
 };
 
 // 辅助函数：JSON 响应
-function jsonResponse(data: any, status = 200, headers = {}) {
+function jsonResponse(data, status = 200, headers = {}) {
   return new Response(JSON.stringify(data), {
     status,
     headers: {
@@ -68,11 +64,7 @@ function jsonResponse(data: any, status = 200, headers = {}) {
 }
 
 // 商品处理器
-async function handleProducts(
-  request: Request,
-  env: Env,
-  path: string[]
-): Promise<Response> {
+async function handleProducts(request, env, path) {
   const id = path[0];
 
   switch (request.method) {
@@ -111,11 +103,7 @@ async function handleProducts(
 }
 
 // 订单处理器
-async function handleOrders(
-  request: Request,
-  env: Env,
-  path: string[]
-): Promise<Response> {
+async function handleOrders(request, env, path) {
   const id = path[0];
 
   switch (request.method) {
@@ -148,11 +136,7 @@ async function handleOrders(
 }
 
 // 库存处理器
-async function handleInventory(
-  request: Request,
-  env: Env,
-  path: string[]
-): Promise<Response> {
+async function handleInventory(request, env, path) {
   const subRoute = path[0];
 
   if (request.method === "GET") {
@@ -185,11 +169,7 @@ async function handleInventory(
 }
 
 // 认证处理器
-async function handleAuth(
-  request: Request,
-  env: Env,
-  path: string[]
-): Promise<Response> {
+async function handleAuth(request, env, path) {
   const action = path[0];
 
   if (request.method === "POST") {
@@ -215,10 +195,7 @@ async function handleAuth(
 }
 
 // 仪表盘处理器
-async function handleDashboard(
-  request: Request,
-  env: Env
-): Promise<Response> {
+async function handleDashboard(request, env) {
   if (request.method !== "GET") {
     return jsonResponse({ success: false, error: "方法不允许" }, 405);
   }
