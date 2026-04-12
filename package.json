@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "eslint",
     "postinstall": "prisma generate --config prisma.config.ts",
-    "edgeone:build": "node scripts/edgeone-build.js",\n    "vercel-build": "prisma generate --config prisma.config.ts && prisma migrate deploy --config prisma.config.ts && next build"
+    "edgeone:build": "node scripts/edgeone-build.js",
+    "vercel-build": "prisma generate --config prisma.config.ts && prisma migrate deploy --config prisma.config.ts && next build"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
